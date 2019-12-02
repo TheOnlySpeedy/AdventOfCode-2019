@@ -1,7 +1,13 @@
 <?php
 
-function getInputForDay($day) {
-    return file ("inputs/$day");
+function getInputForDay($day, $type = 'array') {
+    if ($type === 'array') {
+        return file ("inputs/$day");
+    }
+
+    if ($type === 'string') {
+        return file_get_contents("inputs/$day");
+    }
 }
 
 if (isset($_GET['day']) && $_GET['day'] !== '') {
@@ -11,7 +17,11 @@ if (isset($_GET['day']) && $_GET['day'] !== '') {
     ?>
         <h1>Advent of Code</h1>
         <ul>
-            <li><a href="?day=1">Day 1</a></li>
+            <?php
+                for ($i = 1; $i <= 2; $i++) {
+                    echo("<li><a href='?day=$i'>Day $i</a></li>");
+                }
+            ?>
         </ul>
     <?php
 }
