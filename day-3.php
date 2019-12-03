@@ -11,6 +11,7 @@ foreach ($lines as $line) {
     $x = 0;
     $y = 0;
     $lineNumber++;
+    $moves = 0;
 
     foreach ($parts as $part) {
         $deltaX = 0;
@@ -33,6 +34,7 @@ foreach ($lines as $line) {
 
         $length = (int)substr($part, 1);
         for ($i = 0; $i < $length; $i++) {
+            $moves++;
             $x += $deltaX;
             $y += $deltaY;
 
@@ -44,27 +46,39 @@ foreach ($lines as $line) {
             }
 
             if ($lineNumber === 2) {
-                if ($grid[$x][$y] === 1) {
-                    $crossings[] = new Crossing($x, $y);
+                if (isset($grid[$x][$y][1])) {
+                    $line1Moves = $grid[$x][$y][1];
+                    $crossings[] = new Crossing($x, $y, $line1Moves, $moves);
                 } else {
-                    $grid[$x][$y] = 2;
+                    if (!isset($grid[$x][$y][2])) {
+                        $grid[$x][$y] = [
+                            2 => $moves
+                        ];
+                    }
                 }
             } else {
-                $grid[$x][$y] = 1;
+                if (!isset($grid[$x][$y][1])) {
+                    $grid[$x][$y] = [
+                        1 => $moves
+                    ];
+                }
             }
         }
     }
     // echo('<pre>'.print_r($grid, true).'</pre><hr>');
 }
 
-$closestDistanz = PHP_INT_MAX;
+$closestDistance = PHP_INT_MAX;
+$shortestWireDistance = PHP_INT_MAX;
 /** @var Crossing $crossing */
 foreach($crossings as $crossing) {
-    $closestDistanz = min($closestDistanz,
+    $closestDistance = min($closestDistance,
         abs($crossing->getX()) + abs($crossing->getY())
     );
+    $shortestWireDistance = min($shortestWireDistance, $crossing->getTotalSteps());
 }
-echo("Closest Distanz: $closestDistanz");
+echo("Closest distance: $closestDistance<br>");
+echo('Shortest wire distance: ' . $shortestWireDistance);
 
 class Crossing {
     /** @var int */
@@ -72,11 +86,15 @@ class Crossing {
 
     /** @var int */
     private int $y;
+    private $xSteps;
+    private $ySteps;
 
-    public function __construct(int $x, int $y)
+    public function __construct(int $x, int $y, $xSteps, $ySteps)
     {
         $this->x = $x;
         $this->y = $y;
+        $this->xSteps = $xSteps;
+        $this->ySteps = $ySteps;
     }
 
     /**
@@ -93,6 +111,11 @@ class Crossing {
     public function getY(): int
     {
         return $this->y;
+    }
+
+    public function getTotalSteps(): int
+    {
+        return $this->xSteps + $this->ySteps;
     }
 
     public function __toString()
