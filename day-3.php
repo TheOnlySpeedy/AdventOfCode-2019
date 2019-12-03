@@ -86,8 +86,8 @@ class Crossing {
 
     /** @var int */
     private int $y;
-    private $xSteps;
-    private $ySteps;
+    private int $xSteps;
+    private int $ySteps;
 
     public function __construct(int $x, int $y, $xSteps, $ySteps)
     {
