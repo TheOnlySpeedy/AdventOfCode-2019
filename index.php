@@ -18,7 +18,7 @@ if (isset($_GET['day']) && $_GET['day'] !== '') {
         <h1>Advent of Code</h1>
         <ul>
             <?php
-                for ($i = 1; $i <= 3; $i++) {
+                for ($i = 1; $i <= 4; $i++) {
                     echo("<li><a href='?day=$i'>Day $i</a></li>");
                 }
             ?>
