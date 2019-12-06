@@ -1,6 +1,6 @@
 <?php
 
-$input = getInputForDay('6_0');
+$input = getInputForDay('6');
 $directOrbits = [];
 $parents = [];
 
@@ -12,12 +12,16 @@ foreach($input as $item) {
         $directOrbits[$central] = [];
     }
     $directOrbits[$central][] = $orbiter;
+    $parents[$orbiter] = $central;
 }
 
 $totalOrbits = countChildOrbits($directOrbits['COM'], 1);
 echo('Total Orbits: ' . $totalOrbits.'<br>');
 
-$pathToSanta = [];
+$myPath = pathToRoot('YOU');
+$santaPath = pathToRoot('SAN');
+$pathToTake = array_merge(array_diff($myPath, $santaPath), array_diff($santaPath, $myPath));
+echo('Orbital transfers: ' . count($pathToTake));
 
 function countChildOrbits(array $childOrbits, $level) {
     global $directOrbits;
@@ -30,9 +34,22 @@ function countChildOrbits(array $childOrbits, $level) {
     }
     $count = $level * $childCount;
     foreach ($childOrbits as $child) {
-        if (is_array($directOrbits[$child])) {
+        if (isset($directOrbits[$child]) && is_array($directOrbits[$child])) {
             $count += countChildOrbits($directOrbits[$child], $level+1);
         }
     }
     return $count;
+}
+
+function pathToRoot($name) {
+    global $parents;
+    $path = [];
+    if ($name !== 'YOU' && $name !== 'SAN'){
+        $path[] = $name;
+    }
+    $parent = $parents[$name];
+    if ($parent !== 'COM') {
+        $path = array_merge(pathToRoot($parent),  $path);
+    }
+    return $path;
 }
