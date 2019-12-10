@@ -10,6 +10,10 @@ function getInputForDay($day, $type = 'array') {
     }
 }
 
+function ppr($data) {
+    echo('<pre>'.print_r($data, true).'</pre>');
+}
+
 if (isset($_GET['day']) && $_GET['day'] !== '') {
     $day = $_GET['day'];
     include "day-$day.php";

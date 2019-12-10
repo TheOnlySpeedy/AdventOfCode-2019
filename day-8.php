@@ -54,7 +54,7 @@ for($i = 0, $inputLength = strlen($input); $i < $inputLength; $i++) {
         }
     }
 }
-// echo('<pre>'.print_r($layerMetadata, true).'</pre>');
+ppr($layerMetadata);
 /*
 echo('<table>');
 foreach ($layers[0] as $row) {

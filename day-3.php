@@ -65,7 +65,7 @@ foreach ($lines as $line) {
             }
         }
     }
-    // echo('<pre>'.print_r($grid, true).'</pre><hr>');
+    ppr($grid);
 }
 
 $closestDistance = PHP_INT_MAX;
